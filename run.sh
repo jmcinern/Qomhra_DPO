@@ -3,8 +3,8 @@
 #SBATCH --output=./out/quant_dpo_%j.out
 #SBATCH --error=./err/quant_dpo_%j.err
 #SBATCH --time=00:45:00
-#SBATCH --partition=k2-gpu-a100  
-#SBATCH --gres=gpu:a100:1
+#SBATCH --partition=k2-gpu-h100  
+#SBATCH --gres=gpu:h100:1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=64G
