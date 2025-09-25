@@ -8,12 +8,12 @@ hf_token = os.getenv("HF_TOKEN")
 
 # hf repos
 hf_repo = "jmcinern/"
-model = "qwen3-8B-cpt-sft-awq"
+model_name = "qwen3-8B-cpt-sft-awq"
 dataset= "dpo_dataset_ga"
 
 # load model, tokenizer, dataset
-model = AutoModelForCausalLM.from_pretrained(hf_repo+model, trust_remote_code=True)
-tokenizer = AutoTokenizer.from_pretrained(hf_repo+model, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(hf_repo+model_name, trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained(hf_repo+model_name, trust_remote_code=True)
 train_dataset = load_dataset(hf_repo+dataset, split="train")
 
 # setup DPO training
