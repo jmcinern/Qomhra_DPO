@@ -11,6 +11,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=josephmcinerney7575@gmail.com
 
+pip install -r requirements.txt
 # run it
 accelerate launch dpo_train.py
 
