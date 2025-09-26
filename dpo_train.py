@@ -31,6 +31,7 @@ model = FastLanguageModel.get_peft_model(
     loftq_config = None, # And LoftQ
 )
 # load split
+full_dataset = load_dataset(hf_repo+dataset, use_auth_token=hf_token)
 dataset_split = full_dataset.train_test_split(test_size=0.1, seed=42)
 train_data = dataset_split["train"]
 test_data = dataset_split["test"]
