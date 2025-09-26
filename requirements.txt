@@ -3,3 +3,4 @@ trl
 transformers
 accelerate
 unsloth
+sklearn
