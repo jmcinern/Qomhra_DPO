@@ -2,7 +2,6 @@ from datasets import load_dataset
 import os
 from trl import DPOConfig, DPOTrainer
 from unsloth import FastLanguageModel, PatchDPOTrainer
-from transformers import AutoTokenizer
 from sklearn.model_selection import train_test_split
 
 # get hf token from environment variable
