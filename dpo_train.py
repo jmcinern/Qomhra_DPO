@@ -3,6 +3,8 @@ import os
 from trl import DPOConfig, DPOTrainer
 from unsloth import FastLanguageModel, PatchDPOTrainer
 import wandb
+from transformers import EarlyStoppingCallback
+
 
 # get hf token from environment variable
 hf_token = os.getenv("HF_TOKEN")
@@ -67,6 +69,7 @@ training_args = DPOConfig(
     metric_for_best_model="eval_loss",
     greater_is_better=False, 
     per_device_eval_batch_size=1
+    save_total_limit=3
 )
 early_stopping_callback = EarlyStoppingCallback(
     early_stopping_patience=3,      # Stop after 3 evals without improvement
