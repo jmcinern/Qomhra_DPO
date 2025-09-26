@@ -13,9 +13,8 @@ hf_repo = "jmcinern/"
 model_name = "qwen3-8B-cpt-sft-awq"
 dataset= "dpo_dataset_ga"
 
-# load model, tokenizer, dataset
-tokenizer = AutoTokenizer.from_pretrained(hf_repo + model_name)
-model = FastLanguageModel.from_pretrained(hf_repo+model_name, trust_remote_code=True)
+# load model, tokenizer, dataseta
+model, tokenizer = FastLanguageModel.from_pretrained(hf_repo+model_name, trust_remote_code=True)
 
 # PEFT
 model = FastLanguageModel.get_peft_model(
