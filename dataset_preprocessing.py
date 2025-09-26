@@ -35,10 +35,19 @@ def custom_qwen_chat_template(messages, tokenize=False, add_generation_prompt=Fa
                     add_generation_prompt=add_generation_prompt, 
                     enable_thinking=enable_thinking
                 )
+    # Remove  <think>...</think> tags (enable_thinking=False doesnt seem to be effective)
     think_regex = re.compile(r"<think>.*?</think>\s*", flags=re.DOTALL)
     formatted_text = think_regex.sub("", formatted_text)
-    return formatted_text
+    prompt, response = formatted_text.split("<|im_start|>assistant\n")
+    return prompt, response
 
+'''
+dpo_dataset_dict = {
+    "prompt": [],
+    "chosen": [],
+    "rejected": []
+'''
+prompts = []
 chosens = []
 rejecteds = []  
 for item in dataset["train"]:
@@ -56,13 +65,15 @@ for item in dataset["train"]:
             {"role": "assistant", "content": item["response2"]}
         ]
 
-        chosen_formatted = custom_qwen_chat_template(messages_chosen)
+        prompt, chosen_formatted = custom_qwen_chat_template(messages_chosen)
         rejected_formatted = custom_qwen_chat_template(messages_rejected)
 
+        prompts.append(prompt)
         chosens.append(chosen_formatted)
         rejecteds.append(rejected_formatted)
 
 dpo_dataset = pd.DataFrame({
+    "prompt": prompts,
     "chosen": chosens,
     "rejected": rejecteds
 })
