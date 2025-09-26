@@ -39,7 +39,6 @@ test_data = dataset_split["test"]
 # setup DPO training
 training_args = DPOConfig(
     output_dir="qomhra-8B-awq-dpo", 
-    data_collator = "DataCollatorForPreference", #default
     bf16=True, # unsloth
     per_device_train_batch_size=1, # OOM
     num_train_epochs=3,
