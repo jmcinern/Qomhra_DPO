@@ -3,6 +3,7 @@ import os
 from trl import DPOConfig, DPOTrainer
 from unsloth import FastLanguageModel, PatchDPOTrainer
 from transformers import AutoTokenizer
+from sklearn.model_selection import train_test_split
 
 # get hf token from environment variable
 hf_token = os.getenv("HF_TOKEN")
@@ -31,9 +32,9 @@ model = FastLanguageModel.get_peft_model(
     use_rslora = True,  # rank stabilized LoRA
     loftq_config = None, # And LoftQ
 )
-train_dataset = load_dataset(hf_repo+dataset, split="train")
-test_dataset = load_dataset(hf_repo+dataset, split="test") # for eval
-
+# load split
+full_dataset = load_dataset(hf_repo+dataset, split="train")
+train_data, test_data = train_test_split(full_dataset, test_size=0.1, random_state=42)
 # setup DPO training
 training_args = DPOConfig(
     output_dir="qomhra-8B-awq-dpo", 
