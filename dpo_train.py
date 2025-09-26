@@ -16,7 +16,7 @@ model_name = "qwen3-8B-cpt-sft-awq"
 dataset= "dpo_dataset_ga"
 
 # logging
-wandb.init(project="qomhra-dpo", name=f"dpo-{model_name}")
+wandb.init(project="qomhra-dpo", name=f"FULL_RUN_dpo-{model_name}")
 
 
 # load model, tokenizer, dataseta
