@@ -46,8 +46,8 @@ training_args = DPOConfig(
     learning_rate=5e-7, 
     warmup_ratio = 0.1,
     loss_type="sigmoid", # standard DPO. Bradley-Terry model# (fdefault)
-    beta= 0.1 # default is 0.1 but HF showed 0.01 optimal for DPO, candidates shoul be easy to discern and should avoid underfitting.   
-    report_to="wandb"
+    beta= 0.1, # default is 0.1 but HF showed 0.01 optimal for DPO, candidates shoul be easy to discern and should avoid underfitting.   
+    report_to="wandb",
     logging_steps=5 # default is 10
 )
 
