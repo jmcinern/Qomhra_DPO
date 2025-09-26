@@ -47,6 +47,8 @@ training_args = DPOConfig(
     warmup_ratio = 0.1,
     loss_type="sigmoid", # standard DPO. Bradley-Terry model# (fdefault)
     beta= 0.1 # default is 0.1 but HF showed 0.01 optimal for DPO, candidates shoul be easy to discern and should avoid underfitting.   
+    report_to="wandb"
+    logging_steps=5 # default is 10
 )
 
 trainer = DPOTrainer(
@@ -55,7 +57,6 @@ trainer = DPOTrainer(
     processing_class=tokenizer, 
     train_dataset=train_data,
     eval_dataset=test_data,
-    report_to="wandb"
     )
 
 trainer.train()
