@@ -38,7 +38,7 @@ test_dataset = load_dataset(hf_repo+dataset, split="test") # for eval
 training_args = DPOConfig(
     output_dir="qomhra-8B-awq-dpo", 
     data_collator = "DataCollatorForPreference", #default
-    bf16=True # unsloth
+    bf16=True, # unsloth
     per_device_train_batch_size=1 # OOM
     num_train_epochs=3,
     learning_rate=5e-7, 
