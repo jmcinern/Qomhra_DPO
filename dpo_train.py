@@ -43,7 +43,7 @@ training_args = DPOConfig(
     num_train_epochs=3,
     learning_rate=5e-7, 
     warmup_ratio = 0.1,
-    loss_type="sigmoid" # standard DPO. Bradley-Terry model# (fdefault)
+    loss_type="sigmoid", # standard DPO. Bradley-Terry model# (fdefault)
     beta= 0.1 # default is 0.1 but HF showed 0.01 optimal for DPO, candidates shoul be easy to discern and should avoid underfitting.   
 )
 
@@ -56,4 +56,4 @@ trainer = DPOTrainer(
     report_to="wandb"
     )
 
-#trainer.train()
+trainer.train()
