@@ -2,6 +2,7 @@ from datasets import load_dataset
 import os
 from trl import DPOConfig, DPOTrainer
 from unsloth import FastLanguageModel, PatchDPOTrainer
+import wandb
 
 # get hf token from environment variable
 hf_token = os.getenv("HF_TOKEN")
@@ -11,6 +12,10 @@ PatchDPOTrainer()
 hf_repo = "jmcinern/"
 model_name = "qwen3-8B-cpt-sft-awq"
 dataset= "dpo_dataset_ga"
+
+# logging
+wandb.init(project="qomhra-dpo", name=f"dpo-{model_name}")
+
 
 # load model, tokenizer, dataseta
 model, tokenizer = FastLanguageModel.from_pretrained(hf_repo+model_name, trust_remote_code=True)
@@ -22,7 +27,7 @@ model = FastLanguageModel.get_peft_model(
     target_modules = ["q_proj", "k_proj", "v_proj", "o_proj",
                       "gate_proj", "up_proj", "down_proj"],
     lora_alpha = 256,
-    lora_dropout = 0, # Currently only supports dropout = 0
+    lora_dropout = 0.0, # don't inject noise during DPO 
     bias = "none",    # Currently only supports bias = "none"
     # [NEW] "unsloth" uses 30% less VRAM, fits 2x larger batch sizes!
     use_gradient_checkpointing = "unsloth", # True or "unsloth" for very long context
@@ -48,15 +53,35 @@ training_args = DPOConfig(
     loss_type="sigmoid", # standard DPO. Bradley-Terry model# (fdefault)
     beta= 0.1, # default is 0.1 but HF showed 0.01 optimal for DPO, candidates shoul be easy to discern and should avoid underfitting.   
     report_to="wandb",
-    logging_steps=5 # default is 10
-)
+    logging_steps=5, # default is 10
 
+    # overfitting mitigation
+    lr_scheduler_type="cosine",
+    weight_decay=0.01,
+    max_grad_norm=1.0, # clipping
+    eval_strategy="steps",       
+    eval_steps=50,               
+    save_strategy="steps",      
+    save_steps=50,               
+    load_best_model_at_end=True, 
+    metric_for_best_model="eval_loss",
+    greater_is_better=False, 
+    per_device_eval_batch_size=1
+)
+early_stopping_callback = EarlyStoppingCallback(
+    early_stopping_patience=3,      # Stop after 3 evals without improvement
+    early_stopping_threshold=0.001  # Minimum improvement threshold
+)
 trainer = DPOTrainer(
     model=model, 
     args=training_args, 
     processing_class=tokenizer, 
     train_dataset=train_data,
     eval_dataset=test_data,
+    callbacks=[early_stopping_callback]
     )
+
+#early stoppng
+
 
 trainer.train()
