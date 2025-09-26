@@ -2,6 +2,7 @@ from datasets import load_dataset
 import os
 from trl import DPOConfig, DPOTrainer
 from unsloth import FastLanguageModel, PatchDPOTrainer
+from transformers import AutoTokenizer
 
 # get hf token from environment variable
 hf_token = os.getenv("HF_TOKEN")
