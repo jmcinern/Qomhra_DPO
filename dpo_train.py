@@ -68,7 +68,7 @@ training_args = DPOConfig(
     load_best_model_at_end=True, 
     metric_for_best_model="eval_loss",
     greater_is_better=False, 
-    per_device_eval_batch_size=1
+    per_device_eval_batch_size=1,
     save_total_limit=3
 )
 early_stopping_callback = EarlyStoppingCallback(
